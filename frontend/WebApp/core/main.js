@@ -9,6 +9,7 @@ import {
   logoutUser,
   onAuthStateChange
 } from "../services/firebase.js";
+import { fetchCurrentAlertStatus } from "../services/backend.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   initFirebase();
@@ -64,6 +65,37 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initial Weather
   fetchWeather();
 
+  async function updateFromBackend() {
+    try {
+      const status = await fetchCurrentAlertStatus();
+      const waterLevel = status.waterLevelM ?? 0;
+      const alertLevel = (status.alertLevel || "GREEN").toLowerCase();
+
+      // Use backend description if present
+      if (status.description) {
+        const descEl = document.getElementById("alert-description");
+        if (descEl) descEl.textContent = status.description;
+      }
+
+      renderAlertGuide(alertLevel, waterLevel);
+    } catch (e) {
+      // Fallback to simulated data if backend is down
+      const level = simulateWaterLevel();
+      let alertLevel = "green";
+      if (level >= 15 && level < 16) alertLevel = "yellow";
+      else if (level >= 16 && level < 18) alertLevel = "orange";
+      else if (level >= 18) alertLevel = "red";
+
+      renderAlertGuide(alertLevel, level);
+    }
+  }
+
+  // Fetch once immediately
+  updateFromBackend();
+
+  // Refresh every 30 seconds
+  setInterval(updateFromBackend, 30000);
+
   // Water level loop every 30s
   setInterval(() => {
     const level = simulateWaterLevel();
@@ -76,5 +108,5 @@ document.addEventListener("DOMContentLoaded", () => {
   }, 30000);
 
   // Initial render
-  renderAlertGuide("green", 14.5);
+  // renderAlertGuide("green", 14.5);
 });
