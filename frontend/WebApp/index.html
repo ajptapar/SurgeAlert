@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SurgeAlert</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/css/styles.css"/>
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+</head>
+
+<body class="bg-gray-100">
+
+  <div id="app" class="min-h-screen flex flex-col">
+
+    <!-- HEADER -->
+    <header class="bg-white shadow-md p-4 flex justify-between">
+      <div class="font-bold text-xl cursor-pointer" data-nav="home">SurgeAlert</div>
+      <nav class="space-x-4 hidden md:block">
+        <button data-nav="home" class="nav-link">Home</button>
+        <button data-nav="maps" class="nav-link">Maps</button>
+        <button id="login-btn">Login</button>
+        <button id="logout-btn" style="display:none;">Logout</button>
+      </nav>
+    </header>
+
+    <!-- MAIN -->
+    <main class="flex-1 p-4">
+
+      <!-- HOME VIEW -->
+      <section id="home-view">
+        <h1 class="text-3xl font-bold mb-4">SurgeAlert Dashboard</h1>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+          <!-- Water Level Card -->
+          <div class="bg-white p-6 rounded-lg shadow">
+            <h2 class="text-xl font-semibold mb-2">Water Level Status</h2>
+            <p id="water-level" class="text-4xl font-bold">14.50 m</p>
+            <p id="alert-level" class="text-lg mt-1 font-semibold text-green-600">
+              LEVEL 1 GREEN — SAFE
+            </p>
+          </div>
+
+          <!-- Actions Card -->
+          <div class="bg-white p-6 rounded-lg shadow">
+            <h2 class="text-xl font-semibold mb-2">Actions</h2>
+            <div id="alert-description" class="text-sm"></div>
+          </div>
+
+        </div>
+
+        <!-- Weather -->
+        <div class="bg-white mt-6 p-6 rounded-lg shadow">
+          <h2 class="text-xl font-semibold mb-2">Weather Forecast</h2>
+          <div id="weather-forecast" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
+        </div>
+      </section>
+
+      <!-- MAPS VIEW -->
+      <section id="maps-view" style="display:none;">
+        <h1 class="text-2xl font-bold mb-4">Evacuation Map</h1>
+        <div id="map" style="height: 500px; border-radius: 10px;"></div>
+      </section>
+
+      <!-- LOGIN VIEW -->
+      <section id="login-view" style="display:none;">
+        <h1 class="text-2xl font-bold mb-4">Login</h1>
+
+        <form id="login-form" class="max-w-sm bg-white p-6 rounded-lg shadow">
+          <label>Email</label>
+          <input type="email" id="login-email" class="w-full border p-2 mb-3"/>
+
+          <label>Password</label>
+          <input type="password" id="login-password" class="w-full border p-2 mb-3"/>
+
+          <button type="submit" class="w-full bg-blue-600 text-white py-2">Login</button>
+
+          <p id="login-message" class="text-sm mt-3 hidden"></p>
+        </form>
+      </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-white p-4 text-center text-gray-500">
+      © 2025 SurgeAlert
+    </footer>
+
+  </div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+  <!-- MAIN MODULE ENTRY -->
+  <script type="module" src="core/main.js"></script>
+</body>
+</html>
