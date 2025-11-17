@@ -1,101 +1,214 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SurgeAlert</title>
-
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="assets/css/styles.css"/>
-
-  <!-- Leaflet -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>SurgeAlert</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <link href="styles.css" rel="stylesheet" />
 </head>
-
 <body class="bg-gray-100">
 
-  <div id="app" class="min-h-screen flex flex-col">
+    <div id="app" class="flex flex-col min-h-screen">
+        <header class="bg-white shadow-md sticky top-0 z-10">
+            <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <div class="flex items-center">
+                        <span class="font-bold text-xl text-blue-600 cursor-pointer" onclick="showView('home')">SurgeAlert</span>
+                    </div>
+                    <div class="hidden md:block">
+                        <div class="ml-10 flex items-baseline space-x-4">
+                            <a href="#" onclick="showView('home')" class="text-gray-700 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Home</a>
+                            <a href="#" onclick="showView('maps')" class="text-gray-700 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Maps</a>
+                            <a href="#" class="text-gray-700 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium">About</a>
+                        </div>
+                    </div>
+                    <div class="hidden md:block">
+                         <button onclick="showView('login')" id="login-btn" class="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700">Login</button>
+                         <button onclick="handleLogout()" id="logout-btn" class="bg-red-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-red-700" style="display:none;">Logout</button>
+                         <span id="user-name" class="text-gray-700 px-3 py-2 text-sm font-medium" style="display:none;"></span>
+                    </div>
+                    <div class="-mr-2 flex md:hidden">
+                        <button type="button" class="bg-gray-200 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white" aria-controls="mobile-menu" aria-expanded="false" id="mobile-menu-button">
+                            <span class="sr-only">Open main menu</span>
+                            <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </nav>
+            <div class="md:hidden" id="mobile-menu" style="display: none;">
+                <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                    <a href="#" onclick="showView('home')" class="text-gray-700 block px-3 py-2 rounded-md text-base font-medium hover:bg-blue-500 hover:text-white">Home</a>
+                    <a href="#" onclick="showView('maps')" class="text-gray-700 block px-3 py-2 rounded-md text-base font-medium hover:bg-blue-500 hover:text-white">Maps</a>
+                    <a href="#" class="text-gray-700 block px-3 py-2 rounded-md text-base font-medium hover:bg-blue-500 hover:text-white">About</a>
+                    <button onclick="showView('login')" id="mobile-login-btn" class="bg-blue-600 text-white w-full text-left mt-2 px-3 py-2 rounded-md text-base font-medium hover:bg-blue-700">Login</button>
+                    <button onclick="handleLogout()" id="mobile-logout-btn" class="bg-red-600 text-white w-full text-left mt-2 px-3 py-2 rounded-md text-base font-medium hover:bg-red-700" style="display:none;">Logout</button>
+                </div>
+            </div>
+        </header>
 
-    <!-- HEADER -->
-    <header class="bg-white shadow-md p-4 flex justify-between">
-      <div class="font-bold text-xl cursor-pointer" data-nav="home">SurgeAlert</div>
-      <nav class="space-x-4 hidden md:block">
-        <button data-nav="home" class="nav-link">Home</button>
-        <button data-nav="maps" class="nav-link">Maps</button>
-        <button id="login-btn">Login</button>
-        <button id="logout-btn" style="display:none;">Logout</button>
-      </nav>
-    </header>
+        <main id="main-content" class="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div id="home-view">
+                 <div class="text-center mb-8">
+                    <h1 class="text-4xl font-bold text-gray-800 mb-2">SurgeAlert</h1>
+                    <p class="text-lg text-gray-600">Intelligent flood monitoring and alert system for Barangay Marulas, Valenzuela City.</p>
+                 </div>
 
-    <!-- MAIN -->
-    <main class="flex-1 p-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="md:col-span-2 space-y-8">
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h2 class="text-2xl font-semibold mb-4 text-gray-700">Live Camera Feed - Tullahan River (Marulas)</h2>
+                            <div class="aspect-w-16 aspect-h-9 bg-black rounded-lg overflow-hidden">
+                               <iframe width="100%" height="450" src="https://www.youtube.com/embed/g2iP_s57e84?autoplay=1&mute=1&loop=1&playlist=g2iP_s57e84&controls=0" title="Tullahan River Live Stream" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            </div>
+                             <div class="mt-4 text-sm text-gray-500">
+                                <p>This is a live feed from SurgeAlert Cam. It provides a real-time visual of the river's condition.</p>
+                            </div>
+                        </div>
 
-      <!-- HOME VIEW -->
-      <section id="home-view">
-        <h1 class="text-3xl font-bold mb-4">SurgeAlert Dashboard</h1>
+                        <div id="left-alert-card" class="bg-white p-6 rounded-lg shadow-md">
+                            <div class="text-center">
+                                <p class="text-sm text-gray-600 mb-1">Current water level:</p>
+                                <p id="water-level" class="text-5xl font-bold">14.50 m</p>
+                                <p id="alert-level" class="text-lg mt-2 font-semibold">LEVEL 1 GREEN — BE AWARE & PREPARE</p>
+                            </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="mt-4">
+                                <h3 class="font-semibold mb-2">Legend:</h3>
+                                <ul class="space-y-1 text-sm">
+                                    <li class="flex items-center"><span class="h-4 w-4 rounded-full bg-green-500 mr-2"></span> Green: Normal (<15m)</li>
+                                    <li class="flex items-center"><span class="h-4 w-4 rounded-full bg-yellow-400 mr-2"></span> Yellow: Caution (15m - 16m)</li>
+                                    <li class="flex items-center"><span class="h-4 w-4 rounded-full bg-orange-500 mr-2"></span> Orange: Prepare (16m - 18m)</li>
+                                    <li class="flex items-center"><span class="h-4 w-4 rounded-full bg-red-600 mr-2"></span> Red: Evacuate (>18m)</li>
+                                </ul>
+                            </div>
+                        </div>
 
-          <!-- Water Level Card -->
-          <div class="bg-white p-6 rounded-lg shadow">
-            <h2 class="text-xl font-semibold mb-2">Water Level Status</h2>
-            <p id="water-level" class="text-4xl font-bold">14.50 m</p>
-            <p id="alert-level" class="text-lg mt-1 font-semibold text-green-600">
-              LEVEL 1 GREEN — SAFE
-            </p>
-          </div>
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h2 class="text-2xl font-semibold mb-4 text-gray-700">Weather Forecast</h2>
+                            <div id="weather-forecast" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 text-center">
+                                <div class="flex items-center justify-center h-32">
+                                    <p class="text-gray-500">Loading weather data...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-          <!-- Actions Card -->
-          <div class="bg-white p-6 rounded-lg shadow">
-            <h2 class="text-xl font-semibold mb-2">Actions</h2>
-            <div id="alert-description" class="text-sm"></div>
-          </div>
+                    <div class="space-y-8">
+                        <div id="actions-card" class="bg-white p-6 rounded-lg shadow-md border-l-8 border-green-500">
+                             <h2 class="text-2xl font-semibold mb-4 text-gray-700">Actions</h2>
 
-        </div>
+                             <div id="alert-description" class="text-sm text-gray-700">
+                                 </div>
+                        </div>
 
-        <!-- Weather -->
-        <div class="bg-white mt-6 p-6 rounded-lg shadow">
-          <h2 class="text-xl font-semibold mb-2">Weather Forecast</h2>
-          <div id="weather-forecast" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
-        </div>
-      </section>
+                        <div id="tide-forecast-card" class="bg-white p-6 rounded-lg shadow-md">
+                            <h2 class="text-2xl font-semibold mb-4 text-gray-700">Tide Forecast</h2>
+                            <p class="text-sm text-gray-600 mb-4">
+                                Tidal predictions for Manila Bay, which affects the Tullahan River's drainage.
+                            </p>
+                            <div id="tide-data-container">
+                                <p class="text-sm text-gray-500 mb-2">Data for: <strong>November 6, 2025</strong> (Today)</p>
+                                <ul class="space-y-2 text-sm">
+                                    <li class="flex items-center justify-between p-2 bg-gray-50 rounded-md">
+                                        <span class="font-semibold text-blue-500 flex items-center">
+                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                            Low Tide
+                                        </span>
+                                        <strong>4:53 AM</strong>
+                                    </li>
+                                    <li class="flex items-center justify-between p-2 bg-gray-50 rounded-md">
+                                        <span class="font-semibold text-blue-700 flex items-center">
+                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
+                                            High Tide
+                                        </span>
+                                        <strong>11:33 AM</strong>
+                                    </li>
+                                    <li class="flex items-center justify-between p-2 bg-gray-50 rounded-md">
+                                        <span class="font-semibold text-blue-500 flex items-center">
+                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                            Low Tide
+                                        </span>
+                                        <strong>2:33 PM</strong>
+                                    </li>
+                                     <li class="flex items-center justify-between p-2 bg-gray-50 rounded-md">
+                                        <span class="font-semibold text-blue-700 flex items-center">
+                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
+                                            High Tide
+                                        </span>
+                                        <strong>9:53 PM</strong>
+                                    </li>
+                                </ul>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-4">
+                                This is sample data. For real forecasts, check the official 
+                                <a href="https://www.pagasa.dost.gov.ph/weather" target="_blank" class="text-blue-600 hover:underline">PAGASA Daily Weather Forecast</a>.
+                            </p>
+                        </div>
+                        <div id="buttons-card" class="bg-white p-6 rounded-lg shadow-md">
+                          <div class="actions-buttons-row">
+                            <button onclick="showView('maps')" class="btn-animated w-full px-6 py-3 text-white font-semibold rounded-lg bg-blue-600 hover:bg-blue-700 transition duration-300 flex items-center justify-start">
+                              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l5.447 2.724A1 1 0 0021 16.382V5.618a1 1 0 00-1.447-.894L15 7m-6 3v3m6-3v3m0 0l-6 3"></path></svg>
+                              Nearest Evacuation Site
+                            </button>
 
-      <!-- MAPS VIEW -->
-      <section id="maps-view" style="display:none;">
-        <h1 class="text-2xl font-bold mb-4">Evacuation Map</h1>
-        <div id="map" style="height: 500px; border-radius: 10px;"></div>
-      </section>
+                            <button onclick="showView('register')" class="btn-animated w-full px-6 py-3 text-white font-semibold rounded-lg bg-green-600 hover:bg-green-700 transition duration-300 flex items-center justify-start">
+                              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                              Subscribe for SMS Alert
+                            </button>
+                          </div>
+                        </div>
 
-      <!-- LOGIN VIEW -->
-      <section id="login-view" style="display:none;">
-        <h1 class="text-2xl font-bold mb-4">Login</h1>
+                        </div>
+                </div>
+            </div>
+             <div id="maps-view" style="display: none;">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h2 class="text-2xl font-semibold mb-4 text-gray-700">Evacuation Centers Map</h2>
+                    <p class="mb-4 text-gray-600">Click on any marker to get directions to the evacuation center.</p>
+                    <div style="height: 600px; width: 100%; border-radius: 8px; overflow: hidden;">
+                        <iframe 
+                            src="https://www.google.com/maps/d/embed?mid=1goBzdKF9AG5rIB7eTAtHwd09iSSS0WI&ehbc=2E312F" 
+                            width="100%" 
+                            height="600" 
+                            style="border:0;" 
+                            allowfullscreen="" 
+                            loading="lazy" 
+                            referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="login-view" style_="display: none;">
+                <div class="max-w-sm mx-auto bg-white p-8 rounded-lg shadow-md mt-10">
+                    <h2 class="text-2xl font-semibold mb-6 text-gray-700 text-center">Login</h2>
+                    <form id="login-form">
+                        <div class="mb-4">
+                            <label for="login-email" class="block text-gray-700 text-sm font-medium mb-2">Email</label>
+                            <input type="email" id="login-email" name="email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your email" required>
+                        </div>
+                        <div class="mb-6">
+                            <label for="login-password" class="block text-gray-700 text-sm font-medium mb-2">Password</label>
+                            <input type="password" id="login-password" name="password" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your password" required>
+                            <a href="#" onclick="handlePasswordReset()" class="text-sm text-blue-600 hover:underline mt-2 inline-block">Forgot Password?</a>
+                        </div>
+                        <div id="login-message" class="mb-4 p-3 rounded-lg text-sm" style="display:none;"></div>
+                        <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-blue-700 transition duration-300">Login</button>
+                    </form>
+                    </div>
+            </div>
 
-        <form id="login-form" class="max-w-sm bg-white p-6 rounded-lg shadow">
-          <label>Email</label>
-          <input type="email" id="login-email" class="w-full border p-2 mb-3"/>
+        </main>
 
-          <label>Password</label>
-          <input type="password" id="login-password" class="w-full border p-2 mb-3"/>
-
-          <button type="submit" class="w-full bg-blue-600 text-white py-2">Login</button>
-
-          <p id="login-message" class="text-sm mt-3 hidden"></p>
-        </form>
-      </section>
-
-    </main>
-
-    <!-- FOOTER -->
-    <footer class="bg-white p-4 text-center text-gray-500">
-      © 2025 SurgeAlert
-    </footer>
-
-  </div>
-
-  <!-- Leaflet JS -->
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
-  <!-- MAIN MODULE ENTRY -->
-  <script type="module" src="core/main.js"></script>
-</body>
+        <footer class="bg-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-4 text-center text-gray-600">
+                © 2025 SurgeAlert. All rights reserved.
+            </div>
+        </footer>
+    </div>
 </html>
