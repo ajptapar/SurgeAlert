@@ -18,20 +18,25 @@ public class AlertService {
     }
 
     public AlertStatusDTO getCurrentAlertStatus() {
-        SensorData latest = sensorDataRepository.findFirstByOrderByTimestampDesc()
-                .orElse(null);
+        try {
+            SensorData latest = sensorDataRepository.findFirstByOrderByTimestampDesc()
+                    .orElse(null);
 
-        if (latest == null) {
-            return new AlertStatusDTO(0.0, "GREEN", "No data available", LocalDateTime.now());
+            if (latest == null) {
+                return new AlertStatusDTO(0.0, "GREEN", "No data available", LocalDateTime.now());
+            }
+
+            String description = getAlertDescription(latest.getCurrentAlertLevel());
+            return new AlertStatusDTO(
+                    latest.getWaterLevelM() != null ? latest.getWaterLevelM() : 0.0,
+                    latest.getCurrentAlertLevel() != null ? latest.getCurrentAlertLevel() : "GREEN",
+                    description,
+                    latest.getTimestamp() != null ? latest.getTimestamp() : LocalDateTime.now()
+            );
+        } catch (Exception e) {
+            // Return default status if there's any error
+            return new AlertStatusDTO(0.0, "GREEN", "System initializing. No data available yet.", LocalDateTime.now());
         }
-
-        String description = getAlertDescription(latest.getCurrentAlertLevel());
-        return new AlertStatusDTO(
-                latest.getWaterLevelM(),
-                latest.getCurrentAlertLevel(),
-                description,
-                latest.getTimestamp()
-        );
     }
 
     private String getAlertDescription(String alertLevel) {

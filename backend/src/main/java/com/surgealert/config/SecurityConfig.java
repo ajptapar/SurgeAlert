@@ -1,5 +1,6 @@
 package com.surgealert.config;
 
+import org.springframework.context.annotation.Lazy;
 import com.surgealert.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,7 +26,7 @@ public class SecurityConfig {
 
     private final UserService userService;
 
-    public SecurityConfig(UserService userService) {
+    public SecurityConfig(@Lazy UserService userService) {
         this.userService = userService;
     }
 
@@ -49,14 +50,23 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable()
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()
+        http
+            .csrf(csrf -> csrf.disable())
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**", "/api/public/**").permitAll()
-                .requestMatchers("/api/residents/**").permitAll() // SMS subscription is public
+                .requestMatchers("/api/public/**").permitAll()
+                .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/api/residents/**").permitAll()
+                .requestMatchers("/h2-console/**").permitAll()
+                .requestMatchers("/error").permitAll()
                 .anyRequest().authenticated()
-            );
+            )
+            .headers(headers -> headers
+                .frameOptions(frameOptions -> frameOptions.disable())
+            )
+            .httpBasic(httpBasic -> httpBasic.disable())
+            .formLogin(formLogin -> formLogin.disable());
 
         return http.build();
     }
