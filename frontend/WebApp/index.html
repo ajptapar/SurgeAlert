@@ -7,7 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-    <script type="module" src="main.js"></script> 
     <link href="styles.css" rel="stylesheet" />
 </head>
 <body class="bg-gray-100">
@@ -23,7 +22,7 @@
                         <div class="ml-10 flex items-baseline space-x-4">
                             <a href="#" onclick="showView('home')" class="text-gray-700 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Home</a>
                             <a href="#" onclick="showView('maps')" class="text-gray-700 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Maps</a>
-                            <a href="#" onclick="showView('about')" class="text-gray-700 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium">About</a>
+                            <a href="#" class="text-gray-700 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium">About</a>
                         </div>
                     </div>
                     <div class="hidden md:block">
@@ -45,7 +44,7 @@
                 <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                     <a href="#" onclick="showView('home')" class="text-gray-700 block px-3 py-2 rounded-md text-base font-medium hover:bg-blue-500 hover:text-white">Home</a>
                     <a href="#" onclick="showView('maps')" class="text-gray-700 block px-3 py-2 rounded-md text-base font-medium hover:bg-blue-500 hover:text-white">Maps</a>
-                    <a href="#" onclick="showView('about')" class="text-gray-700 block px-3 py-2 rounded-md text-base font-medium hover:bg-blue-500 hover:text-white">About</a>
+                    <a href="#" class="text-gray-700 block px-3 py-2 rounded-md text-base font-medium hover:bg-blue-500 hover:text-white">About</a>
                     <button onclick="showView('login')" id="mobile-login-btn" class="bg-blue-600 text-white w-full text-left mt-2 px-3 py-2 rounded-md text-base font-medium hover:bg-blue-700">Login</button>
                     <button onclick="handleLogout()" id="mobile-logout-btn" class="bg-red-600 text-white w-full text-left mt-2 px-3 py-2 rounded-md text-base font-medium hover:bg-red-700" style="display:none;">Logout</button>
                 </div>
@@ -107,22 +106,49 @@
                                  </div>
                         </div>
 
-					<div id="tide-forecast-card" class="bg-white p-6 rounded-lg shadow-md">
-						<h2 class="text-2xl font-semibold mb-4 text-gray-700">Tide Forecast</h2>
-						<p class="text-sm text-gray-600 mb-4">
-							Tidal predictions for Manila Bay, which affects the Tullahan River's drainage.
-						</p>
-						
-						<div id="tide-data-container">
-							<p class="text-sm text-gray-500 text-center">Loading tide data...</p>
-						</div>
-						
-						<p class="text-xs text-gray-500 mt-4">
-							Tide data provided by WorldTides. For official forecasts, check 
-							<a href="https://www.pagasa.dost.gov.ph/weather" target="_blank" class="text-blue-600 hover:underline">PAGASA</a>.
-						</p>
-					</div>
-						
+                        <div id="tide-forecast-card" class="bg-white p-6 rounded-lg shadow-md">
+                            <h2 class="text-2xl font-semibold mb-4 text-gray-700">Tide Forecast</h2>
+                            <p class="text-sm text-gray-600 mb-4">
+                                Tidal predictions for Manila Bay, which affects the Tullahan River's drainage.
+                            </p>
+                            <div id="tide-data-container">
+                                <p class="text-sm text-gray-500 mb-2">Data for: <strong>November 6, 2025</strong> (Today)</p>
+                                <ul class="space-y-2 text-sm">
+                                    <li class="flex items-center justify-between p-2 bg-gray-50 rounded-md">
+                                        <span class="font-semibold text-blue-500 flex items-center">
+                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                            Low Tide
+                                        </span>
+                                        <strong>4:53 AM</strong>
+                                    </li>
+                                    <li class="flex items-center justify-between p-2 bg-gray-50 rounded-md">
+                                        <span class="font-semibold text-blue-700 flex items-center">
+                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
+                                            High Tide
+                                        </span>
+                                        <strong>11:33 AM</strong>
+                                    </li>
+                                    <li class="flex items-center justify-between p-2 bg-gray-50 rounded-md">
+                                        <span class="font-semibold text-blue-500 flex items-center">
+                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                            Low Tide
+                                        </span>
+                                        <strong>2:33 PM</strong>
+                                    </li>
+                                     <li class="flex items-center justify-between p-2 bg-gray-50 rounded-md">
+                                        <span class="font-semibold text-blue-700 flex items-center">
+                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
+                                            High Tide
+                                        </span>
+                                        <strong>9:53 PM</strong>
+                                    </li>
+                                </ul>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-4">
+                                This is sample data. For real forecasts, check the official 
+                                <a href="https://www.pagasa.dost.gov.ph/weather" target="_blank" class="text-blue-600 hover:underline">PAGASA Daily Weather Forecast</a>.
+                            </p>
+                        </div>
                         <div id="buttons-card" class="bg-white p-6 rounded-lg shadow-md">
                           <div class="actions-buttons-row">
                             <button onclick="showView('maps')" class="btn-animated w-full px-6 py-3 text-white font-semibold rounded-lg bg-blue-600 hover:bg-blue-700 transition duration-300 flex items-center justify-start">
@@ -158,45 +184,6 @@
                 </div>
             </div>
             
-			<div id="about-view" style="display: none;">
-                <div class="bg-white p-6 rounded-lg shadow-md max-w-4xl mx-auto">
-                    <h2 class="text-3xl font-semibold mb-4 text-gray-700 text-center">About SurgeAlert</h2>
-                    <p class="text-gray-600 mb-6 text-center">
-                        SurgeAlert is an intelligent flood monitoring and alert system designed for Barangay Marulas, Valenzuela City. 
-                        Our mission is to provide timely, accurate, and easy-to-understand flood warnings to residents through live monitoring, visual feeds, and SMS alerts.
-                    </p>
-                    <!-- About cards -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
-                            <h3 class="text-xl font-semibold mb-2 text-gray-700">Purpose</h3>
-                            <p class="text-gray-600 text-sm">
-                                The system helps residents prepare for potential floods by providing live water level data, weather forecasts, and nearest evacuation center information. 
-                                Early awareness helps minimize risks to life and property.
-                            </p>
-                        </div>
-                        <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
-                            <h3 class="text-xl font-semibold mb-2 text-gray-700">Features</h3>
-                            <ul class="list-disc list-inside text-gray-600 text-sm space-y-1">
-                                <li>Real-time water level monitoring with alert levels (Green, Yellow, Orange, Red)</li>
-                                <li>Live camera feed of Tullahan River for visual monitoring</li>
-                                <li>Weather forecast and tide prediction to anticipate flooding</li>
-                                <li>Evacuation center map with directions</li>
-                                <li>SMS alert subscription to receive timely flood warnings</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="mt-6 bg-gray-50 p-4 rounded-lg shadow-sm">
-                        <h3 class="text-xl font-semibold mb-2 text-gray-700">How It Works</h3>
-                        <p class="text-gray-600 text-sm">
-                            The system collects water level data from monitoring stations along the Tullahan River, processes it, and updates alert levels dynamically. 
-                            When water levels reach a critical threshold, users subscribed to SMS alerts will receive notifications, and the system updates the website with visual indicators and action guides. 
-                            Residents can use the maps to find the nearest evacuation centers during emergencies.
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-			
             <div id="login-view" style_="display: none;">
                 <div class="max-w-sm mx-auto bg-white p-8 rounded-lg shadow-md mt-10">
                     <h2 class="text-2xl font-semibold mb-6 text-gray-700 text-center">Login</h2>
@@ -215,76 +202,7 @@
                     </form>
                     </div>
             </div>
-			<div id="register-view" style="display: none;"> 
-			<div class="max-w-md mx-auto bg-white p-8 rounded-lg shadow-md mt-10">
-				<h2 class="text-2xl font-semibold mb-2 text-gray-700 text-center">Subscribe for SMS Alerts</h2>
-				<p class="text-sm text-gray-600 text-center mb-6">Register your phone number to receive flood alerts via SMS</p>
-				
-				<div id="phone-step" style="display: block;">
-					<form id="phone-form">
-						<div class="mb-4">
-							<label for="register-name" class="block text-gray-700 text-sm font-medium mb-2">Full Name</label>
-							<input type="text" id="register-name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Juan Dela Cruz" required>
-						</div>
-						<div class="mb-4">
-							<label for="register-phone" class="block text-gray-700 text-sm font-medium mb-2">Phone Number</label>
-							<div class="flex">
-								<span class="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-lg">+63</span>
-								<input type="tel" id="register-phone" class="rounded-none rounded-r-lg border border-gray-300 text-gray-900 focus:ring-green-500 focus:border-green-500 block flex-1 min-w-0 w-full text-sm p-2.5" placeholder="9123456789" pattern="[0-9]{10}" maxlength="10" required>
-							</div>
-							<p class="text-xs text-gray-500 mt-1">Enter 10-digit mobile number (without +63)</p>
-						</div>
-						<div class="mb-6">
-							<label for="register-address" class="block text-gray-700 text-sm font-medium mb-2">Address in Marulas</label>
-							<input type="text" id="register-address" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Street, Barangay Marulas" required>
-						</div>
-						<div class="mb-6 flex items-center">
-								<input type="checkbox" id="privacy-consent" name="privacy-consent" class="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500">
-								<label for="privacy-consent" class="ml-2 text-sm text-gray-700">
-									I agree to the <a href="#" class="text-blue-600 hover:underline">Data Privacy Policy</a> and consent to receive SMS alerts.
-								</label>
-							</div>
 
-							<div id="phone-message" class="mb-4 p-3 rounded-lg text-sm" style="display:none;"></div>
-							
-							<button type="submit" id="send-otp-btn" class="w-full bg-green-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-green-700 transition duration-300">
-								Send Verification Code
-							</button>
-							
-						</form>
-				</div>
-
-				<div id="otp-step" style="display: none;">
-					<form id="otp-form">
-						<div class="text-center mb-4">
-							<p class="text-sm text-gray-600">We've sent a 6-digit code to</p>
-							<p class="font-semibold text-gray-800" id="display-phone"></p>
-						</div>
-						<div class="mb-4">
-							<label for="otp-code" class="block text-gray-700 text-sm font-medium mb-2 text-center">Enter Verification Code</label>
-							<input type="text" id="otp-code" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-center text-2xl tracking-widest" placeholder="000000" maxlength="6" pattern="[0-9]{6}" required>
-						</div>
-						<div id="otp-message" class="mb-4 p-3 rounded-lg text-sm" style="display:none;"></div>
-						<button type="submit" class="w-full bg-green-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-green-700 transition duration-300 mb-2">Verify & Subscribe</button>
-						<button type="button" onclick="resendOTP()" class="w-full bg-gray-200 text-gray-700 py-2 px-4 rounded-lg font-semibold hover:bg-gray-300 transition duration-300 text-sm">Resend Code</button>
-						<button type="button" onclick="backToPhoneStep()" class="w-full text-blue-600 hover:text-blue-700 py-2 text-sm mt-2">Change Phone Number</button>
-					</form>
-				</div>
-
-				<div id="success-step" style="display: none;">
-					<div class="text-center">
-						<div class="mb-4">
-							<svg class="mx-auto h-16 w-16 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-							</svg>
-						</div>
-						<h3 class="text-xl font-semibold text-gray-800 mb-2">Successfully Registered!</h3>
-						<p class="text-gray-600 mb-4">You will now receive SMS alerts for flood warnings in Barangay Marulas.</p>
-						<button onclick="showView('home')" class="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 transition duration-300">Go to Home</button>
-					</div>
-				</div>
-			</div>
-		</div>
         </main>
 
         <footer class="bg-white">
@@ -293,5 +211,4 @@
             </div>
         </footer>
     </div>
-    </body>
-    </html>
+</html>

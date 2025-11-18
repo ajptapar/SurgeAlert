@@ -1,4 +1,4 @@
- async function fetchWeather() {
+       async function fetchWeather() {
             const weatherContainer = document.getElementById('weather-forecast');
             const url = `https://api.open-meteo.com/v1/forecast?latitude=14.6773&longitude=120.9842&hourly=temperature_2m,weathercode&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=Asia/Singapore`;
 
