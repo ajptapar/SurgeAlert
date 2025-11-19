@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale-1.0"/>
     <title>SurgeAlert</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
@@ -61,8 +61,7 @@
                 <!-- Main Grid Container - Reordered for Mobile View -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                     
-                    <!-- Mobile View Item #1: Live Camera Feed -->
-                    <!-- Desktop View: Left Column, First Item -->
+                    <!-- Mobile Order #1 / Desktop: Top-Left -->
                     <div class="bg-white p-6 rounded-lg shadow-md md:col-span-2">
                         <h2 class="text-2xl font-semibold mb-4 text-gray-700">Live Camera Feed - Tullahan River (Marulas)</h2>
                         <div class="aspect-w-16 aspect-h-9 bg-black rounded-lg overflow-hidden">
@@ -73,9 +72,8 @@
                         </div>
                     </div>
 
-                    <!-- Mobile View Item #2: Current Water Level -->
-                    <!-- Desktop View: Left Column, Second Item -->
-                    <div id="left-alert-card" class="bg-white p-6 rounded-lg shadow-md md:col-span-2 md:row-start-2">
+                    <!-- Mobile Order #2 / Desktop: Mid-Left -->
+                    <div id="left-alert-card" class="bg-white p-6 rounded-lg shadow-md md:col-span-2">
                         <div class="text-center">
                             <p class="text-sm text-gray-600 mb-1">Current water level:</p>
                             <p id="water-level" class="text-5xl font-bold">14.50 m</p>
@@ -92,15 +90,13 @@
                         </div>
                     </div>
                     
-                    <!-- Mobile View Item #3: Actions Card -->
-                    <!-- Desktop View: Right Column, First Item -->
+                    <!-- Mobile Order #3 / Desktop: Top-Right -->
                     <div id="actions-card" class="bg-white p-6 rounded-lg shadow-md border-l-8 border-green-500 md:col-start-3 md:row-start-1">
                          <h2 class="text-2xl font-semibold mb-4 text-gray-700">Actions</h2>
                          <div id="alert-description" class="text-sm text-gray-700"></div>
                     </div>
 
-                    <!-- Mobile View Item #4: Buttons Card -->
-                    <!-- Desktop View: Right Column, Second Item -->
+                    <!-- Mobile Order #4 / Desktop: Mid-Right -->
                     <div id="buttons-card" class="bg-white p-6 rounded-lg shadow-md md:col-start-3 md:row-start-2">
                       <div class="actions-buttons-row">
                         <button onclick="showView('maps')" class="btn-animated w-full px-6 py-3 text-white font-semibold rounded-lg bg-blue-600 hover:bg-blue-700 transition duration-300 flex items-center justify-start">
@@ -114,9 +110,8 @@
                       </div>
                     </div>
 
-                    <!-- Mobile View Item #5: Weather Forecast -->
-                    <!-- Desktop View: Left Column, Third Item -->
-                    <div class="bg-white p-6 rounded-lg shadow-md md:col-span-2 md:row-start-3">
+                    <!-- Mobile Order #5 / Desktop: Bottom-Left -->
+                    <div class="bg-white p-6 rounded-lg shadow-md md:col-span-2">
                         <h2 class="text-2xl font-semibold mb-4 text-gray-700">Weather Forecast</h2>
                         <div id="weather-forecast" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 text-center">
                             <div class="flex items-center justify-center h-32">
@@ -125,8 +120,7 @@
                         </div>
                     </div>
 
-                    <!-- Mobile View Item #6: Tide Forecast -->
-                    <!-- Desktop View: Right Column, Third Item -->
+                    <!-- Mobile Order #6 / Desktop: Bottom-Right -->
                     <div id="tide-forecast-card" class="bg-white p-6 rounded-lg shadow-md md:col-start-3 md:row-start-3">
                         <h2 class="text-2xl font-semibold mb-4 text-gray-700">Tide Forecast</h2>
                         <p class="text-sm text-gray-600 mb-4">
@@ -143,7 +137,8 @@
 
                 </div>
             </div>
-             <div id="maps-view" style="display: none;">
+            
+            <div id="maps-view" style="display: none;">
                 <div class="bg-white p-6 rounded-lg shadow-md">
                     <h2 class="text-2xl font-semibold mb-4 text-gray-700">Evacuation Centers Map</h2>
                     <p class="mb-4 text-gray-600">Click on any marker to get directions to the evacuation center.</p>
