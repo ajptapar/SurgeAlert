@@ -58,90 +58,81 @@
                     <p class="text-lg text-gray-600">Intelligent flood monitoring and alert system for Barangay Marulas, Valenzuela City.</p>
                  </div>
 
-                <!-- Main Grid Container -->
+                <!-- Main Grid Container - Reordered for Perfect Mobile & Desktop Views -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                     
-                    <!-- Left Column Container -->
-                    <div class="md:col-span-2 space-y-8">
-                        
-                        <!-- Live Camera Feed -->
-                        <div class="bg-white p-6 rounded-lg shadow-md">
-                            <h2 class="text-2xl font-semibold mb-4 text-gray-700">Live Camera Feed - Tullahan River (Marulas)</h2>
-                            <div class="aspect-w-16 aspect-h-9 bg-black rounded-lg overflow-hidden">
-                               <iframe width="100%" height="450" src="https://www.youtube.com/embed/g2iP_s57e84?autoplay=1&mute=1&loop=1&playlist=g2iP_s57e84&controls=0" title="Tullahan River Live Stream" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                            </div>
-                             <div class="mt-4 text-sm text-gray-500">
-                                <p>This is a live feed from SurgeAlert Cam. It provides a real-time visual of the river's condition.</p>
-                            </div>
+                    <!-- Mobile Order #1 / Desktop: Top-Left -->
+                    <div class="bg-white p-6 rounded-lg shadow-md md:col-span-2">
+                        <h2 class="text-2xl font-semibold mb-4 text-gray-700">Live Camera Feed - Tullahan River (Marulas)</h2>
+                        <div class="aspect-w-16 aspect-h-9 bg-black rounded-lg overflow-hidden">
+                           <iframe width="100%" height="450" src="https://www.youtube.com/embed/g2iP_s57e84?autoplay=1&mute=1&loop=1&playlist=g2iP_s57e84&controls=0" title="Tullahan River Live Stream" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                         </div>
-
-                        <!-- Current Water Level -->
-                        <div id="left-alert-card" class="bg-white p-6 rounded-lg shadow-md">
-                            <div class="text-center">
-                                <p class="text-sm text-gray-600 mb-1">Current water level:</p>
-                                <p id="water-level" class="text-5xl font-bold">14.50 m</p>
-                                <p id="alert-level" class="text-lg mt-2 font-semibold">LEVEL 1 GREEN — BE AWARE & PREPARE</p>
-                            </div>
-                            <div class="mt-4">
-                                <h3 class="font-semibold mb-2">Legend:</h3>
-                                <ul class="space-y-1 text-sm">
-                                    <li class="flex items-center"><span class="h-4 w-4 rounded-full bg-green-500 mr-2"></span> Green: Normal (<15m)</li>
-                                    <li class="flex items-center"><span class="h-4 w-4 rounded-full bg-yellow-400 mr-2"></span> Yellow: Caution (15m - 16m)</li>
-                                    <li class="flex items-center"><span class="h-4 w-4 rounded-full bg-orange-500 mr-2"></span> Orange: Prepare (16m - 18m)</li>
-                                    <li class="flex items-center"><span class="h-4 w-4 rounded-full bg-red-600 mr-2"></span> Red: Evacuate (>18m)</li>
-                                </ul>
-                            </div>
+                         <div class="mt-4 text-sm text-gray-500">
+                            <p>This is a live feed from SurgeAlert Cam. It provides a real-time visual of the river's condition.</p>
                         </div>
-
-                        <!-- Weather Forecast -->
-                        <div class="bg-white p-6 rounded-lg shadow-md">
-                            <h2 class="text-2xl font-semibold mb-4 text-gray-700">Weather Forecast</h2>
-                            <div id="weather-forecast" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 text-center">
-                                <div class="flex items-center justify-center h-32">
-                                    <p class="text-gray-500">Loading weather data...</p>
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
 
-                    <!-- Right Column Container -->
-                    <div class="space-y-8">
-
-                        <!-- Actions Card -->
-                        <div id="actions-card" class="bg-white p-6 rounded-lg shadow-md border-l-8 border-green-500">
-                             <h2 class="text-2xl font-semibold mb-4 text-gray-700">Actions</h2>
-                             <div id="alert-description" class="text-sm text-gray-700"></div>
+                    <!-- Mobile Order #2 / Desktop: Mid-Left -->
+                    <div id="left-alert-card" class="bg-white p-6 rounded-lg shadow-md md:col-span-2">
+                        <div class="text-center">
+                            <p class="text-sm text-gray-600 mb-1">Current water level:</p>
+                            <p id="water-level" class="text-5xl font-bold">14.50 m</p>
+                            <p id="alert-level" class="text-lg mt-2 font-semibold">LEVEL 1 GREEN — BE AWARE & PREPARE</p>
                         </div>
-
-                        <!-- Buttons Card -->
-                        <div id="buttons-card" class="bg-white p-6 rounded-lg shadow-md">
-                          <div class="actions-buttons-row">
-                            <button onclick="showView('maps')" class="btn-animated w-full px-6 py-3 text-white font-semibold rounded-lg bg-blue-600 hover:bg-blue-700 transition duration-300 flex items-center justify-start">
-                              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l5.447 2.724A1 1 0 0021 16.382V5.618a1 1 0 00-1.447-.894L15 7m-6 3v3m6-3v3m0 0l-6 3"></path></svg>
-                              Nearest Evacuation Site
-                            </button>
-                            <button onclick="showView('register')" class="btn-animated w-full px-6 py-3 text-white font-semibold rounded-lg bg-green-600 hover:bg-green-700 transition duration-300 flex items-center justify-start">
-                              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                              Subscribe for SMS Alert
-                            </button>
-                          </div>
+                        <div class="mt-4">
+                            <h3 class="font-semibold mb-2">Legend:</h3>
+                            <ul class="space-y-1 text-sm">
+                                <li class="flex items-center"><span class="h-4 w-4 rounded-full bg-green-500 mr-2"></span> Green: Normal (<15m)</li>
+                                <li class="flex items-center"><span class="h-4 w-4 rounded-full bg-yellow-400 mr-2"></span> Yellow: Caution (15m - 16m)</li>
+                                <li class="flex items-center"><span class="h-4 w-4 rounded-full bg-orange-500 mr-2"></span> Orange: Prepare (16m - 18m)</li>
+                                <li class="flex items-center"><span class="h-4 w-4 rounded-full bg-red-600 mr-2"></span> Red: Evacuate (>18m)</li>
+                            </ul>
                         </div>
+                    </div>
+                    
+                    <!-- Mobile Order #3 / Desktop: Top-Right -->
+                    <div id="actions-card" class="bg-white p-6 rounded-lg shadow-md border-l-8 border-green-500 md:col-start-3 md:row-start-1">
+                         <h2 class="text-2xl font-semibold mb-4 text-gray-700">Actions</h2>
+                         <div id="alert-description" class="text-sm text-gray-700"></div>
+                    </div>
 
-                        <!-- Tide Forecast -->
-                        <div id="tide-forecast-card" class="bg-white p-6 rounded-lg shadow-md">
-                            <h2 class="text-2xl font-semibold mb-4 text-gray-700">Tide Forecast</h2>
-                            <p class="text-sm text-gray-600 mb-4">
-                                Tidal predictions for Manila Bay, which affects the Tullahan River's drainage.
-                            </p>
-                            <div id="tide-data-container">
-                                <p class="text-sm text-gray-500 text-center">Loading tide data...</p>
+                    <!-- Mobile Order #4 / Desktop: Mid-Right -->
+                    <div id="buttons-card" class="bg-white p-6 rounded-lg shadow-md md:col-start-3 md:row-start-2">
+                      <div class="actions-buttons-row">
+                        <button onclick="showView('maps')" class="btn-animated w-full px-6 py-3 text-white font-semibold rounded-lg bg-blue-600 hover:bg-blue-700 transition duration-300 flex items-center justify-start">
+                          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l5.447 2.724A1 1 0 0021 16.382V5.618a1 1 0 00-1.447-.894L15 7m-6 3v3m6-3v3m0 0l-6 3"></path></svg>
+                          Nearest Evacuation Site
+                        </button>
+                        <button onclick="showView('register')" class="btn-animated w-full px-6 py-3 text-white font-semibold rounded-lg bg-green-600 hover:bg-green-700 transition duration-300 flex items-center justify-start">
+                          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                          Subscribe for SMS Alert
+                        </button>
+                      </div>
+                    </div>
+
+                    <!-- Mobile Order #5 / Desktop: Bottom-Left -->
+                    <div class="bg-white p-6 rounded-lg shadow-md md:col-span-2">
+                        <h2 class="text-2xl font-semibold mb-4 text-gray-700">Weather Forecast</h2>
+                        <div id="weather-forecast" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 text-center">
+                            <div class="flex items-center justify-center h-32">
+                                <p class="text-gray-500">Loading weather data...</p>
                             </div>
-                            <p class="text-xs text-gray-500 mt-4">
-                                Tide data provided by WorldTides. For official forecasts, check 
-                                <a href="https://www.pagasa.dost.gov.ph/weather" target="_blank" class="text-blue-600 hover:underline">PAGASA</a>.
-                            </p>
                         </div>
+                    </div>
+
+                    <!-- Mobile Order #6 / Desktop: Bottom-Right -->
+                    <div id="tide-forecast-card" class="bg-white p-6 rounded-lg shadow-md md:col-start-3 md:row-start-3">
+                        <h2 class="text-2xl font-semibold mb-4 text-gray-700">Tide Forecast</h2>
+                        <p class="text-sm text-gray-600 mb-4">
+                            Tidal predictions for Manila Bay, which affects the Tullahan River's drainage.
+                        </p>
+                        <div id="tide-data-container">
+                            <p class="text-sm text-gray-500 text-center">Loading tide data...</p>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-4">
+                            Tide data provided by WorldTides. For official forecasts, check 
+                            <a href="https://www.pagasa.dost.gov.ph/weather" target="_blank" class="text-blue-600 hover:underline">PAGASA</a>.
+                        </p>
                     </div>
 
                 </div>
