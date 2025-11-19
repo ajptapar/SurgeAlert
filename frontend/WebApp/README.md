@@ -10,20 +10,18 @@ This version uses a clean, lightweight modular structure inspired by EdgeSystem-
 SurgeAlert/
 │
 ├── js/
-│   ├── alert.js       # Logic for water level simulation and dynamic UI updates.
-│   ├── api.js         # Fetches 5-day weather forecast data from Open-Meteo.
-│   ├── auth.js        # Handles all Firebase authentication (login, logout, state observer).
-│   ├── config.js      # Stores shared constants like view names and alert guide text.
-│   ├── main.js        # The main entry point; initializes the app and event listeners.
-│   ├── map.js         # Initializes the Leaflet.js interactive map and evacuation markers.
-│   ├── tides.js       # Fetches daily tide data from the WorldTides API.
-│   └── ui.js          # Manages UI interactions like switching views and handling forms.
+│ ├── alert.js # Logic for water level simulation and dynamic UI updates.
+│ ├── api.js # Fetches 5-day weather forecast data from Open-Meteo.
+│ ├── auth.js # Handles all Firebase authentication (login, logout, state observer).
+│ ├── config.js # Stores shared constants like view names and alert guide text.
+│ ├── main.js # The main entry point; initializes the app and event listeners.
+│ ├── map.js # Initializes the Leaflet.js interactive map and evacuation markers.
+│ ├── tides.js # Fetches daily tide data from the WorldTides API.
+│ └── ui.js # Manages UI interactions like switching views and handling forms.
 │
-├── index.html         # The single HTML file for the entire application.
-├── styles.css         # All styling, variables, and animations for the project.
-└── README.md          # This file.
-
----
+├── index.html # The single HTML file for the entire application.
+├── styles.css # All styling, variables, and animations for the project.
+└── README.md # This file.
 
 ---
 
