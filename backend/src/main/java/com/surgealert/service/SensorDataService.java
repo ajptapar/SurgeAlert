@@ -24,7 +24,11 @@ public class SensorDataService {
         sensorData.setSensorFlowRateMps(dto.getSensorFlowRateMps());
         sensorData.setImageFlowRateMps(dto.getImageFlowRateMps());
         sensorData.setImageRiseRateMps(dto.getImageRiseRateMps());
-        sensorData.setCurrentAlertLevel(dto.getCurrentAlertLevel());
+        
+        // CRITICAL FIX: Force Uppercase to ensure it matches NotificationService keys
+        String alertLevel = dto.getCurrentAlertLevel() != null ? dto.getCurrentAlertLevel().toUpperCase() : "GREEN";
+        sensorData.setCurrentAlertLevel(alertLevel);
+        
         return sensorDataRepository.save(sensorData);
     }
 
