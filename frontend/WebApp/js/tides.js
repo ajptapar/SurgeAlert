@@ -1,9 +1,9 @@
 export async function fetchTides() {
-    const apiKey = 'c9369bb7-d224-47d7-889d-7fcccc93e23d'; 
+    const apiKey = '4e9f736f-06ac-46a4-bebc-537e9cb8b200'; 
     const lat = 14.576; // Latitude for Manila South Harbor
     const lon = 120.963; // Longitude for Manila South Harbor
     
-    const url = `https://www.worldtides.info/api/v3?extremes&lat=${14.576}&lon=${120.963}&key=${c9369bb7-d224-47d7-889d-7fcccc93e23d}`; //Check the url on API
+    const url = `https://www.worldtides.info/api/v3?extremes&lat=${lat}&lon=${lon}&key=${apiKey}`;
     
     const container = document.getElementById('tide-data-container');
 
@@ -16,11 +16,9 @@ export async function fetchTides() {
         const data = await response.json();
         
         if (data.status != 200) {
-            // Handle API-specific errors
             console.error('WorldTides API Error:', data.error);
             container.innerHTML = `<p class="text-red-500 text-sm">Could not load tide data: ${data.error}</p>`;
         } else {
-            // Success! Send data to be rendered
             updateTideUI(data.extremes);
         }
     } catch (error) {
@@ -48,7 +46,6 @@ function updateTideUI(tides) {
         html += '<li class="text-gray-500">No tide data available for today.</li>';
     } else {
         tides.forEach(tide => {
-            // The API returns time as a Unix timestamp (seconds), so multiply by 1000
             const tideTime = new Date(tide.dt * 1000);
             
             const timeString = tideTime.toLocaleTimeString('en-US', {

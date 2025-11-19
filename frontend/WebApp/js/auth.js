@@ -56,7 +56,7 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
         showMessage('login-message', 'Login successful! Redirecting...', 'success');
         document.getElementById('login-form').reset();
         setTimeout(() => {
-            window.showView('home'); // Use global function
+            window.showView('home');
         }, 1000);
     } catch (error) {
         console.error('Login error:', error);
@@ -74,20 +74,19 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
     }
 });
 
-// Logout Handler
-window.handleLogout = async () => {
+// Define the functions that need to be global
+async function handleLogout() {
     try {
         await signOut(auth);
-        window.showView('home'); // Use global function
+        window.showView('home');
         alert('Logged out successfully!');
     } catch (error) {
         console.error('Logout error:', error);
         alert('Failed to logout. Please try again.');
     }
-};
+}
 
-// Password Reset Handler
-window.handlePasswordReset = async () => {
+async function handlePasswordReset() {
     const email = document.getElementById('login-email').value;
     if (!email) {
         alert('Please enter your email address first.');
@@ -100,7 +99,11 @@ window.handlePasswordReset = async () => {
         console.error('Password reset error:', error);
         alert('Failed to send reset email. Please check your email address.');
     }
-};
+}
+
+// CORRECTED: Expose the functions to the global window object
+window.handleLogout = handleLogout;
+window.handlePasswordReset = handlePasswordReset;
 
 // Auth State Observer
 onAuthStateChanged(auth, async (user) => {
