@@ -1,133 +1,120 @@
 # SurgeAlert — Modular Flood Monitoring System
 
-SurgeAlert is a web-based flood monitoring and early-warning system designed for Barangay Marulas, Valenzuela City.  
-This version uses a clean, lightweight modular structure inspired by EdgeSystem-style organization, but simplified for easier development and maintenance.
+SurgeAlert is a web-based flood monitoring and early-warning system designed for Barangay Marulas, Valenzuela City. This version uses a clean, lightweight, and flat modular structure, making the codebase easy to understand, maintain, and extend.
 
 ---
 
 ## 📁 Project Structure
 
+The project is organized into a simple, flat structure where each JavaScript module has a distinct responsibility.
+
 SurgeAlert/
 │
-├── core/
-│ ├── main.js # Main app initializer (navigation, events, simulation loop)
-│ └── views.js # Handles switching between Home, Maps, and Login views
+├── js/
+│ ├── alert.js # Logic for water level simulation and dynamic UI updates.
+│ ├── api.js # Fetches 5-day weather forecast data from Open-Meteo.
+│ ├── auth.js # Handles all Firebase authentication (login, logout, state observer).
+│ ├── config.js # Stores shared constants like view names and alert guide text.
+│ ├── main.js # The main entry point; initializes the app and event listeners.
+│ ├── map.js # Initializes the Leaflet.js interactive map and evacuation markers.
+│ ├── tides.js # Fetches daily tide data from the WorldTides API.
+│ └── ui.js # Manages UI interactions like switching views and handling forms.
 │
-├── logic/
-│ ├── alert.js # Alert levels + water level UI logic
-│ ├── map.js # Leaflet map with evacuation markers
-│ └── weather.js # Weather API fetch and forecast rendering
-│
-├── services/
-│ ├── firebase.js # Firebase initialization + login/logout handler
-│ └── simulation.js # Simulated water level generator (placeholder for sensors)
-│
-├── assets/
-│ ├── css/
-│ │ └── styles.css # Project styling
-│ ├── data/
-│ │ └── tides.json # Example tide dataset
-│ └── templates/
-│ └── alert.html # Optional HTML template for alerts
-│
-└── index.html # Main UI file (loads all modules)
+├── index.html # The single HTML file for the entire application.
+├── styles.css # All styling, variables, and animations for the project.
+└── README.md # This file.
 
 ---
 
 ## 🚀 Features
 
-### 🌧️ Real-Time Water Level Display  
-- Simulates rising and falling river levels  
-- Automatically assigns alert status:
-  - 🟢 **Green — Safe**
+### 🌧️ Real-Time Water Level Display
+- Simulates rising and falling river levels with a dynamic display.
+- Automatically assigns alert status and detailed action guides:
+  - 🟢 **Green — Normal**
   - 🟡 **Yellow — Caution**
   - 🟠 **Orange — Prepare**
-  - 🔴 **Red — Evacuate Now**
+  - 🔴 **Red — Evacuate**
 
-### ☁️ Weather Forecast  
-- 4-day forecast using Open-Meteo API  
-- Displays date and temperature range  
-- Lightweight, fast, no API key needed
+### ☁️ 5-Day Weather Forecast
+- Fetches and displays a 5-day forecast using the free Open-Meteo API.
+- Shows the day, a weather icon, a short description, and the max/min temperatures.
+- Lightweight and requires no API key.
 
-### 🗺️ Interactive Evacuation Map  
-- Powered by Leaflet  
-- Shows nearby evacuation centers  
-- Click markers to view names and locations
+### 🌊 Daily Tide Forecast
+- Displays high and low tide times for the current day from the WorldTides API.
+- Helps residents understand how tides may affect the river's drainage.
+
+### 🗺️ Interactive Evacuation Map
+- Powered by Leaflet.js for a fast and interactive experience.
+- Shows predefined evacuation centers in the area.
+- Users can click on markers to view the name of the location.
 
 ### 🔐 User Authentication (Firebase)
-- Login / Logout system  
-- Auth state detection  
-- Ready for role-based access
+- Simple and secure Login / Logout system using Firebase Authentication.
+- Automatically detects user auth state to update the UI.
+- Ready to be expanded with role-based access or user profiles.
 
-### 📦 Modular JavaScript Architecture  
-Each major feature is separated into its own module:
-- `logic/` for main app logic  
-- `services/` for APIs and backend connections  
-- `core/` for navigation and app control
-
-This makes the project **easier to understand, maintain, and expand**.
+### 📦 Modular JavaScript Architecture
+Each feature is cleanly separated into its own JavaScript module within the `js/` directory. This flat structure makes the project **easy to understand, maintain, and expand** without complex folder navigation.
 
 ---
 
 ## 🛠️ Technologies Used
 
-- **JavaScript ES Modules**
-- **HTML5 + TailwindCSS**
+- **JavaScript (ES Modules)**
+- **HTML5 & TailwindCSS**
 - **Firebase Authentication**
-- **Leaflet Maps**
-- **Open-Meteo Weather API**
-- **Modular Project Architecture**
+- **Leaflet.js** (Interactive Maps)
+- **Open-Meteo API** (Weather Data)
+- **World Tides API** (Tide Data)
 
 ---
 
 ## ▶️ How to Run the Project
 
-Because ES modules do **not** load using `file:///`,  
-you must run the project using a simple web server.
+Because this project uses ES Modules, you cannot run it by opening the `index.html` file directly in your browser (`file:///...`). You must serve it from a local web server.
 
-### **Option 1 — Python (Recommended)**
-```sh
-python -m http.server 8000
-Then open:
-http://localhost:8000
+### **Option 1: Using the VS Code Live Server Extension**
+1.  Install the **Live Server** extension from the Visual Studio Code marketplace.
+2.  Right-click on `index.html` in your file explorer and select "Open with Live Server".
 
-🔧 Customization
-Change Water-Level Behavior
+### **Option 2: Using Python (If installed)**
+1.  Open your terminal or command prompt in the project's root directory.
+2.  Run the following command:
+    ```sh
+    python -m http.server
+    ```
+3.  Open your web browser and go to: **`http://localhost:8000`**
 
-services/simulation.js
+---
 
-Change Alert Thresholds
+## 🔧 Customization
 
-core/main.js
+-   **Change Alert Thresholds & Water Level Logic:**
+    -   Modify the `if/else` conditions in `js/alert.js`.
 
-Customize Alert UI
+-   **Update Alert Text & Action Guides:**
+    -   Edit the `ALERT_GUIDE` object in `js/config.js`.
 
-logic/alert.js
+-   **Modify Map Locations:**
+    -   Update the `evacuationSites` array in `js/map.js`.
 
-Modify Map Locations
+-   **Change API Keys or Endpoints:**
+    -   Edit the constants in `js/tides.js` or `js/api.js`.
 
-logic/map.js
+---
 
-🚧 Future Improvements
+## 🚧 Future Improvements
 
-SMS alert integration
+-   [ ] **SMS Alert Integration** (via Twilio or other services)
+-   [ ] **Real IoT Sensor Data** (replace simulation with data from an ESP32, etc.)
+-   [ ] **Admin Dashboard** for managing users and alerts.
+-   [ ] **Push Notifications** for real-time browser alerts.
+-   [ ] **Offline Support** (Progressive Web App - PWA).
 
-Real IoT sensor data (ESP32/LoRa)
+---
 
-Admin dashboard
+## 📜 License
 
-Push notifications
-
-ML-based flood prediction
-
-Offline/PWA support
-
-👨‍💻 Developer Notes
-
-This project was intentionally structured to be clean and scalable.
-Each folder handles one responsibility, allowing new modules to be added easily.
-
-If you want a more advanced EdgeSystem-style layout later, it can be expanded naturally.
-
-📜 License
 This project is licensed under the MIT License.
