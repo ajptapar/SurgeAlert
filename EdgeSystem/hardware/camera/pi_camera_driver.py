@@ -1,26 +1,40 @@
 # EdgeSystem/hardware/camera/pi_camera_driver.py
-
-# This is a TEMPLATE file.
-# You will need to install the picamera2 library: pip install picamera2
-# from picamera2 import Picamera2
+import cv2
 import time
-from config.settings import IMAGE_WIDTH, IMAGE_HEIGHT
+from config.settings import IMAGE_WIDTH, IMAGE_HEIGHT, CAMERA_INDEX
 
 class PiCameraDriver:
     def __init__(self):
-        # self.picam2 = Picamera2()
-        # config = self.picam2.create_preview_configuration(main={"size": (IMAGE_WIDTH, IMAGE_HEIGHT)})
-        # self.picam2.configure(config)
-        # self.picam2.start()
-        # time.sleep(2) # Allow camera to warm up
-        raise NotImplementedError("PiCameraDriver is not implemented yet. Requires real hardware.")
+        print(f"Initializing Camera (Index {CAMERA_INDEX})...")
+        # cv2.CAP_V4L2 is often required on Raspberry Pi for better compatibility
+        # If it fails on Windows/Mac, remove cv2.CAP_V4L2
+        try:
+            self.cap = cv2.VideoCapture(CAMERA_INDEX, cv2.CAP_V4L2)
+        except:
+            self.cap = cv2.VideoCapture(CAMERA_INDEX)
+            
+        if not self.cap.isOpened():
+            print("ERROR: Could not open camera.")
+            raise RuntimeError("Camera initialization failed.")
+            
+        # Set Resolution
+        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, IMAGE_WIDTH)
+        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, IMAGE_HEIGHT)
+        
+        # Allow camera to warm up
+        time.sleep(1)
+        print("Camera Initialized Successfully.")
 
     def capture_frame(self):
-        """Captures a single frame from the Pi Camera."""
-        # frame = self.picam2.capture_array()
-        # return frame
-        raise NotImplementedError("PiCameraDriver is not implemented yet. Requires real hardware.")
+        """Captures a single frame from the camera."""
+        ret, frame = self.cap.read()
+        if not ret:
+            print("Error: Failed to grab frame.")
+            return None
+        return frame
 
     def close(self):
-        # self.picam2.stop()
-        pass
+        """Releases the camera resource."""
+        if self.cap.isOpened():
+            self.cap.release()
+            print("Camera released.")

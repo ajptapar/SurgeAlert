@@ -1,24 +1,12 @@
-# EdgeSystem/system_main/sms_sender.py
 import os
-from config.settings import SMS_TEMPLATES_DIR, TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_PHONE_NUMBER
+from config.settings import SMS_TEMPLATES_DIR
 from system_main.database_manager import DatabaseManager
 
-# For Twilio integration:
-# from twilio.rest import Client # Uncomment this when you install Twilio
-
-class SMSSender:
+class SMSManager:
     def __init__(self, db_manager: DatabaseManager):
         self.db_manager = db_manager
         self.templates = {}
         self._load_templates()
-
-        # Initialize Twilio client IF using Twilio and credentials are set
-        # if TWILIO_ACCOUNT_SID and TWILIO_AUTH_TOKEN and TWILIO_PHONE_NUMBER:
-        #     self.twilio_client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
-        # else:
-        #     self.twilio_client = None
-        #     print("Twilio credentials not fully configured. SMS sending will be simulated.")
-        self.twilio_client = None # For now, always simulate
 
     def _load_templates(self):
         """Loads SMS alert messages from text files."""
@@ -36,13 +24,26 @@ class SMSSender:
         """Retrieves the appropriate message for a given alert level."""
         return self.templates.get(alert_level.upper(), f"SurgeAlert: Unknown Alert Level ({alert_level}).")
 
-    def send_alert(self, alert_level):
+    def send_alert(self, alert_level, explicit_recipients=None):
         """
-        Sends the alert message to all registered residents.
-        Currently simulates sending if Twilio is not configured.
+        Sends the alert message. 
+        
+        Args:
+            alert_level (str): The level (RED, ORANGE, etc.)
+            explicit_recipients (list): Optional. A list of numbers passed from the Java Backend.
+                                        If this is None, the system falls back to the local database.
         """
         message = self.get_alert_message(alert_level)
-        recipients = self.db_manager.get_all_registered_phone_numbers()
+        
+        # LOGIC: Use the list from Java Backend if available. 
+        # If not (e.g., offline mode), use the local SQLite database.
+        if explicit_recipients and len(explicit_recipients) > 0:
+            recipients = explicit_recipients
+            source = "Java Backend"
+        else:
+            recipients = self.db_manager.get_all_registered_phone_numbers()
+            source = "Local Database"
+
         recipient_count = len(recipients)
 
         if recipient_count == 0:
@@ -50,42 +51,40 @@ class SMSSender:
             return
 
         print(f"\n--- Sending {alert_level} Alert ---")
+        print(f"Source of Numbers: {source}")
         print(f"Message: '{message}'")
         print(f"Recipients: {', '.join(recipients)}")
 
-        if self.twilio_client:
-            # --- ACTUAL TWILIO SENDING (Uncomment when ready) ---
-            for number in recipients:
-                try:
-                    # message = self.twilio_client.messages.create(
-                    #     to=number,
-                    #     from_=TWILIO_PHONE_NUMBER,
-                    #     body=message
-                    # )
-                    # print(f"Sent {alert_level} alert to {number} (SID: {message.sid})")
-                    pass # Remove this 'pass' when uncommenting above
-                except Exception as e:
-                    print(f"Error sending SMS to {number}: {e}")
-        else:
-            print("SIMULATING SMS sending. No actual messages sent.")
-            # Simulate a delay for demonstration
-            # import time
-            # time.sleep(0.5 * recipient_count)
-
+        # --- GSM MODULE LOGIC (FUTURE) ---
+        # This is where you will eventually put the AT Commands for the Sim800L
+        # For now, we simulate.
+        print(">> SIMULATION: GSM Module initiating...")
+        for number in recipients:
+            print(f"   -> Sending SMS to {number} ... [SUCCESS]")
+        
         # Log the sent alert in the database
         self.db_manager.log_sent_alert(alert_level, message, recipient_count)
-        print(f"Simulated {alert_level} alert sent to {recipient_count} residents and logged.")
+        print(f"Alert logged to database.")
 
-# Example Usage (for testing this module directly)
+# --- TEST ZONE ---
+# The code below ONLY runs if you type "python sms_manager.py" in the terminal.
+# It DOES NOT run when the main system is running.
 if __name__ == "__main__":
-    db_manager = DatabaseManager()
-    db_manager.register_resident("+639171112222") # Make sure some residents are registered
-    db_manager.register_resident("+639173334444")
+    print("--- TESTING SMS MANAGER (ISOLATED) ---")
     
-    sms_sender = SMSSender(db_manager)
+    # 1. Setup a dummy database manager
+    db_manager = DatabaseManager()
+    
+    # 2. Add fake numbers just for this test
+    print("Registering test numbers...")
+    db_manager.register_resident("+639170000001") 
+    
+    # 3. Initialize Manager
+    sms_manager = SMSManager(db_manager)
 
-    sms_sender.send_alert("GREEN")
-    sms_sender.send_alert("YELLOW")
-    sms_sender.send_alert("ORANGE")
-    sms_sender.send_alert("RED")
-    sms_sender.send_alert("UNKNOWN") # Test unknown alert level
+    # 4. Test Sending
+    sms_manager.send_alert("RED")
+    
+    # 5. Clean up (optional, to keep your db clean)
+    db_manager.unregister_resident("+639170000001")
+    print("Test complete.")

@@ -1,13 +1,14 @@
 # EdgeSystem/ml_model/model_predictor.py
 import joblib
 import os
+import numpy as np
 from config.settings import BASE_DIR
 
 class ModelPredictor:
     def __init__(self):
         self.model = None
         model_path = os.path.join(BASE_DIR, 'ml_model', 'trained_models', 'flood_alert_model.joblib')
-        
+       
         try:
             self.model = joblib.load(model_path)
             print("AI model loaded successfully.")
@@ -19,22 +20,17 @@ class ModelPredictor:
     def predict(self, water_level, flow_rate, rise_rate):
         """
         Predicts the alert level using the trained AI model.
-        Returns a default value if the model is not loaded.
         """
         if self.model is None:
-            # If no model, we don't make a prediction.
-            # The alert_manager will rely solely on its threshold logic.
             return None
 
         try:
-            # The input should be a 2D array, so we wrap our data in a list
-            # The order of features MUST match the order used during training!
-            features = [[water_level, flow_rate, rise_rate]]
-            
+            # Convert input to numpy array (Standard format for scikit-learn)
+            features = np.array([[water_level, flow_rate, rise_rate]])
+           
             # prediction = self.model.predict(features)
-            # return prediction[0] # Return the single prediction
-            
-            # Placeholder until a real model is trained
+            # return prediction[0] 
+           
             print("AI model is loaded but prediction is currently a placeholder.")
             return None
 
