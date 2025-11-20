@@ -13,6 +13,10 @@ public class Resident {
     @Column(nullable = false, unique = true)
     private String phoneNumber;
 
+    // ADDED EMAIL FIELD (Not unique, as requested)
+    @Column
+    private String email;
+
     @Column(nullable = false)
     private LocalDateTime registrationDate;
 
@@ -30,6 +34,10 @@ public class Resident {
 
     public String getPhoneNumber() { return phoneNumber; }
     public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
+
+    // ADDED EMAIL GETTER/SETTER
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
     public LocalDateTime getRegistrationDate() { return registrationDate; }
     public void setRegistrationDate(LocalDateTime registrationDate) { this.registrationDate = registrationDate; }

@@ -79,6 +79,12 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- This is the for sending email that we are using temporarily -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+
         <!-- Lombok (optional, for reducing boilerplate) -->
         <dependency>
             <groupId>org.projectlombok</groupId>

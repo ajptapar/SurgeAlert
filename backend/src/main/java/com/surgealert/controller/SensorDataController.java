@@ -2,6 +2,7 @@ package com.surgealert.controller;
 
 import com.surgealert.dto.SensorDataDTO;
 import com.surgealert.entity.SensorData;
+import com.surgealert.service.EmailService; //import
 import com.surgealert.service.NotificationService;
 import com.surgealert.service.ResidentService;
 import com.surgealert.service.SensorDataService;
@@ -20,40 +21,49 @@ public class SensorDataController {
     private final SensorDataService sensorDataService;
     private final NotificationService notificationService;
     private final ResidentService residentService;
+    private final EmailService emailService;
 
-    // Inject all required services
-    public SensorDataController(SensorDataService sensorDataService, 
-                                NotificationService notificationService, 
-                                ResidentService residentService) {
+    public SensorDataController(SensorDataService sensorDataService,
+                                NotificationService notificationService,
+                                ResidentService residentService,
+                                EmailService emailService) {
         this.sensorDataService = sensorDataService;
         this.notificationService = notificationService;
         this.residentService = residentService;
+        this.emailService = emailService;
     }
 
     @PostMapping
     public ResponseEntity<Map<String, Object>> saveSensorData(@RequestBody SensorDataDTO dto) {
-        // 1. Save the data to Database
+        // 1. Save Data
         SensorData savedData = sensorDataService.saveSensorData(dto);
 
-        // 2. Prepare the Response for the Raspberry Pi
         Map<String, Object> response = new HashMap<>();
         response.put("saved_id", savedData.getId());
         response.put("status", "success");
 
-        // 3. Check Logic: Do we need to send an SMS?
+        // 2. Check Logic
         String level = savedData.getCurrentAlertLevel();
         
-        // Retrieve the template based on level (YELLOW, ORANGE, RED, GREEN)
+        // Get the message template (e.g., "SurgeAlert: RED ALERT...")
         String messageToSend = notificationService.getAlertMessage(level);
 
-        // If a message exists for this level AND it is a critical level (or All Clear)
-        // Note: You can adjust this 'if' condition if you only want to send SMS on RED/ORANGE
-        if (messageToSend != null && (level.equals("ORANGE") || level.equals("RED") || level.equals("YELLOW") || level.equals("GREEN"))) {
+        // --- CRITICAL CHANGE HERE ---
+        // We ONLY send alerts if the level is YELLOW, ORANGE, or RED.
+        // We REMOVED "GREEN" to prevent spamming users when the river is safe.
+        if (messageToSend != null && (level.equals("YELLOW") || level.equals("ORANGE") || level.equals("RED"))) {
             
-            // A. Get all phone numbers
-            List<String> phoneNumbers = residentService.getAllActivePhoneNumbers();
+            // --- A. EMAIL (Server Side) ---
+            List<String> emails = residentService.getAllActiveEmails();
+            if (!emails.isEmpty()) {
+                String subject = "SurgeAlert: " + level + " LEVEL WARNING";
+                for (String email : emails) {
+                    emailService.sendAlertEmail(email, subject, messageToSend);
+                }
+            }
 
-            // B. Add instructions to the response
+            // --- B. SMS (Hardware Side) ---
+            List<String> phoneNumbers = residentService.getAllActivePhoneNumbers();
             if (!phoneNumbers.isEmpty()) {
                 response.put("command", "SEND_SMS");
                 response.put("message", messageToSend);
@@ -61,12 +71,12 @@ public class SensorDataController {
             } else {
                 response.put("command", "NO_RECIPIENTS");
             }
+
         } else {
-            // No SMS needed (e.g., Normal readings without state change)
+            // If it is GREEN (Safe), we do nothing.
             response.put("command", "NO_ACTION");
         }
 
-        // 4. Return JSON to Python
         return ResponseEntity.ok(response);
     }
 

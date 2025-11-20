@@ -1,5 +1,6 @@
 package com.surgealert.service;
 
+import com.surgealert.dto.ResidentRequest; // Import the DTO
 import com.surgealert.entity.Resident;
 import com.surgealert.repository.ResidentRepository;
 import org.springframework.stereotype.Service;
@@ -15,12 +16,14 @@ public class ResidentService {
         this.residentRepository = residentRepository;
     }
 
-    public Resident registerResident(String phoneNumber) {
-        if (residentRepository.existsByPhoneNumber(phoneNumber)) {
+    // UPDATED: Takes ResidentRequest object now
+    public Resident registerResident(ResidentRequest request) {
+        if (residentRepository.existsByPhoneNumber(request.getPhoneNumber())) {
             throw new RuntimeException("Phone number already registered");
         }
         Resident resident = new Resident();
-        resident.setPhoneNumber(phoneNumber);
+        resident.setPhoneNumber(request.getPhoneNumber());
+        resident.setEmail(request.getEmail()); // SAVE EMAIL
         return residentRepository.save(resident);
     }
 
@@ -34,6 +37,14 @@ public class ResidentService {
     public List<String> getAllActivePhoneNumbers() {
         return residentRepository.findByIsActiveTrue().stream()
                 .map(Resident::getPhoneNumber)
+                .collect(Collectors.toList());
+    }
+
+    // ADDED: Method to get all active emails
+    public List<String> getAllActiveEmails() {
+        return residentRepository.findByIsActiveTrue().stream()
+                .map(Resident::getEmail)
+                .filter(email -> email != null && !email.isEmpty()) // Ignore residents without email
                 .collect(Collectors.toList());
     }
 
