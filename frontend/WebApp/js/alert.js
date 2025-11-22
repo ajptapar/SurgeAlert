@@ -1,4 +1,7 @@
-import { ALERT_GUIDE } from './config.js';
+import { fetchAlertGuide } from './config.js';
+
+// Variable to store the guide so we don't fetch it every single time
+let CACHED_GUIDE = null;
 
 export async function updateAlertStatus() {
     const waterLevelEl = document.getElementById('water-level');
@@ -9,20 +12,28 @@ export async function updateAlertStatus() {
     const h2 = actionsCard.querySelector('h2');
 
     try {
-        // Fetch from your Backend
+        // 1. LOAD THE GUIDE (If we haven't already)
+        if (!CACHED_GUIDE) {
+            CACHED_GUIDE = await fetchAlertGuide();
+            // If it still fails or returns null, stop here
+            if (!CACHED_GUIDE) { 
+                console.error("Alert Guide could not be loaded.");
+                return; 
+            }
+        }
+
+        // 2. Fetch Sensor Data from Backend
         const response = await fetch('http://localhost:8080/api/public/alerts/status');
         if (!response.ok) throw new Error('Network response was not ok');
         
         const data = await response.json();
 
         // --- HANDLE OFFLINE STATE ---
-        // Check waterLevelM (from DTO) instead of level
         if (data.waterLevelM === null || data.alertLevel === 'OFFLINE') {
             waterLevelEl.textContent = "--.-- m";
             alertLevelEl.textContent = "SENSOR OFFLINE";
             alertLevelEl.className = "text-lg mt-2 font-semibold text-gray-500";
             
-            // Visuals for Offline
             resetClasses(leftCard, actionsCard, h2);
             leftCard.classList.add('bg-gray-200');
             actionsCard.classList.add('border-gray-400');
@@ -37,14 +48,14 @@ export async function updateAlertStatus() {
         }
 
         // --- HANDLE ONLINE STATE ---
-        const currentLevel = data.waterLevelM; // Matches DTO
-        const levelKey = data.alertLevel.toLowerCase(); // Matches DTO ("GREEN" -> "green")
+        const currentLevel = data.waterLevelM;
+        const levelKey = data.alertLevel.toLowerCase(); 
 
         // Update Text
         waterLevelEl.textContent = currentLevel.toFixed(2) + ' m';
         
-        // Get text guide from config
-        const guide = ALERT_GUIDE[levelKey] || ALERT_GUIDE['green'];
+        // USE THE CACHED GUIDE HERE
+        const guide = CACHED_GUIDE[levelKey] || CACHED_GUIDE['green'];
         alertLevelEl.textContent = guide.title;
 
         // Update Actions Description
@@ -65,14 +76,14 @@ export async function updateAlertStatus() {
 
     } catch (error) {
         console.error("Failed to fetch alert status:", error);
-        // Fallback to Offline UI on error
         waterLevelEl.textContent = "--.-- m";
         alertLevelEl.textContent = "CONNECTION ERROR";
         leftCard.classList.add('bg-gray-200');
     }
 }
 
-// Helper to clean up old classes
+// --- HELPER FUNCTIONS (Keep these at the bottom of the file) ---
+
 function resetClasses(leftCard, actionsCard, h2) {
     const bgClasses = ['bg-green-100', 'bg-yellow-100', 'bg-orange-100', 'bg-red-100', 'bg-gray-200'];
     const borderClasses = ['border-green-500', 'border-yellow-400', 'border-orange-500', 'border-red-600', 'border-gray-400'];
@@ -83,7 +94,6 @@ function resetClasses(leftCard, actionsCard, h2) {
     h2.classList.remove(...textClasses);
 }
 
-// Helper to apply colors based on status
 function updateColors(levelKey, leftCard, actionsCard, h2) {
     resetClasses(leftCard, actionsCard, h2);
     
