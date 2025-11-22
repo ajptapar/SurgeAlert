@@ -41,9 +41,8 @@ public class AuthController {
             }
 
             // 4. Save/Update User in MySQL
-            userService.registerUser(request, firebaseUid);
-            
-            return ResponseEntity.ok("User synced successfully");
+            User savedUser = userService.registerUser(request, firebaseUid);
+            return ResponseEntity.ok(savedUser); // Return the whole user object (including Role)
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
