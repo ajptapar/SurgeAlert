@@ -1,24 +1,23 @@
 export async function fetchTides() {
-    const apiKey = '4e9f736f-06ac-46a4-bebc-537e9cb8b200'; 
-    const lat = 14.576; // Latitude for Manila South Harbor
-    const lon = 120.963; // Longitude for Manila South Harbor
-    
-    const url = `https://www.worldtides.info/api/v3?extremes&lat=${lat}&lon=${lon}&key=${apiKey}`;
+    // POINT THIS TO YOUR BACKEND
+    const url = 'http://localhost:8080/api/external/tides';
     
     const container = document.getElementById('tide-data-container');
 
     try {
         const response = await fetch(url);
         if (!response.ok) {
-            throw new Error(`API Error: ${response.statusText}`);
+            throw new Error(`Backend API Error: ${response.statusText}`);
         }
         
         const data = await response.json();
         
-        if (data.status != 200) {
-            console.error('WorldTides API Error:', data.error);
+        // Check if the backend sent an error message inside the JSON
+        if (data.error) {
+            console.error('Tide Data Error:', data.error);
             container.innerHTML = `<p class="text-red-500 text-sm">Could not load tide data: ${data.error}</p>`;
         } else {
+            // data.extremes comes from your TideResponse DTO
             updateTideUI(data.extremes);
         }
     } catch (error) {
@@ -26,6 +25,8 @@ export async function fetchTides() {
         container.innerHTML = '<p class="text-red-500 text-sm">Could not load tide data.</p>';
     }
 }
+
+// --- UI LOGIC REMAINS UNCHANGED BELOW ---
 
 function updateTideUI(tides) {
     const container = document.getElementById('tide-data-container');

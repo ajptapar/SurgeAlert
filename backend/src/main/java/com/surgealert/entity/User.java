@@ -10,17 +10,18 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // This links the MySQL user to the Firebase User
+    @Column(nullable = false, unique = true)
+    private String firebaseUid; 
+
     @Column(nullable = false, unique = true)
     private String email;
-
-    @Column(nullable = false)
-    private String password;
 
     @Column(nullable = false)
     private String fullName;
 
     @Column(nullable = false)
-    private String role = "ADMIN"; // ADMIN, OFFICIAL
+    private String role = "ADMIN"; 
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
@@ -42,12 +43,12 @@ public class User {
     // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
+    
+    public String getFirebaseUid() { return firebaseUid; }
+    public void setFirebaseUid(String firebaseUid) { this.firebaseUid = firebaseUid; }
 
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
-
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
 
     public String getFullName() { return fullName; }
     public void setFullName(String fullName) { this.fullName = fullName; }

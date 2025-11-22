@@ -25,9 +25,13 @@ public class SensorDataService {
         sensorData.setImageFlowRateMps(dto.getImageFlowRateMps());
         sensorData.setImageRiseRateMps(dto.getImageRiseRateMps());
         
-        // CRITICAL FIX: Force Uppercase to ensure it matches NotificationService keys
-        String alertLevel = dto.getCurrentAlertLevel() != null ? dto.getCurrentAlertLevel().toUpperCase() : "GREEN";
-        sensorData.setCurrentAlertLevel(alertLevel);
+        // LOGIC: If hardware sends status, use it. If not, calculate it here.
+        String alertLevel = dto.getCurrentAlertLevel();
+        if (alertLevel == null || alertLevel.isEmpty()) {
+            alertLevel = calculateAlertLevel(dto.getWaterLevelM());
+        }
+        
+        sensorData.setCurrentAlertLevel(alertLevel.toUpperCase());
         
         return sensorDataRepository.save(sensorData);
     }
@@ -35,7 +39,7 @@ public class SensorDataService {
     public SensorDataDTO getLatestSensorData() {
         return sensorDataRepository.findFirstByOrderByTimestampDesc()
                 .map(this::convertToDTO)
-                .orElse(null);
+                .orElse(null); // Returns null if no data exists (Offline state)
     }
 
     public List<SensorDataDTO> getRecentSensorData(int hours) {
@@ -55,5 +59,14 @@ public class SensorDataService {
         dto.setImageRiseRateMps(sensorData.getImageRiseRateMps());
         dto.setCurrentAlertLevel(sensorData.getCurrentAlertLevel());
         return dto;
+    }
+
+    // CENTRALIZED LOGIC FOR ALERT STATUS
+    private String calculateAlertLevel(Double waterLevel) {
+        if (waterLevel == null) return "GREEN";
+        if (waterLevel < 15.0) return "GREEN";
+        if (waterLevel >= 15.0 && waterLevel < 16.0) return "YELLOW";
+        if (waterLevel >= 16.0 && waterLevel < 18.0) return "ORANGE";
+        return "RED";
     }
 }

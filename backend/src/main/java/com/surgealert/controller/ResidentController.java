@@ -22,7 +22,6 @@ public class ResidentController {
     @PostMapping("/register")
     public ResponseEntity<?> registerResident(@RequestBody ResidentRequest request) {
         try {
-            // UPDATED: Passing the whole request (Phone + Email)
             Resident resident = residentService.registerResident(request);
             return ResponseEntity.status(HttpStatus.CREATED).body("Resident registered successfully");
         } catch (Exception e) {
