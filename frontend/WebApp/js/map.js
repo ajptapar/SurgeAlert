@@ -1,4 +1,7 @@
-export function initMap() {
+import { API_BASE_URL } from './config.js';
+
+export async function initMap() {
+    // 1. Initialize Map
     const map = L.map('map-container').setView([14.6773, 120.9842], 14);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -6,14 +9,7 @@ export function initMap() {
         attribution: '© OpenStreetMap contributors'
     }).addTo(map);
 
-    const evacuationSites = [
-        { name: 'Marulas Elementary School', lat: 14.6780, lng: 120.9850, address: 'Marulas, Valenzuela City' },
-        { name: 'Marulas High School', lat: 14.6765, lng: 120.9835, address: 'Marulas, Valenzuela City' },
-        { name: 'Valenzuela City Astrodome', lat: 14.6640, lng: 120.9880, address: 'MacArthur Highway, Valenzuela City' },
-        { name: 'Valenzuela City People\'s Park', lat: 14.6590, lng: 120.9890, address: 'Gen. T. de Leon, Valenzuela City' },
-        { name: 'Coloong Elementary School', lat: 14.6950, lng: 120.9720, address: 'Coloong, Valenzuela City' }
-    ];
-
+    // 2. Define Icon
     const customIcon = L.icon({
         iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
         iconSize: [25, 41],
@@ -23,10 +19,30 @@ export function initMap() {
         shadowSize: [41, 41]
     });
 
-    evacuationSites.forEach(site => {
-        L.marker([site.lat, site.lng], { icon: customIcon }).addTo(map)
-            .bindPopup(`<b>${site.name}</b><br>${site.address}`);
-    });
+    // 3. Fetch Data from Backend
+    try {
+        const response = await fetch(`${API_BASE_URL}/public/evacuation-sites`);
+        
+        if (!response.ok) throw new Error(`Failed to fetch map data: ${response.statusText}`);
+
+        const evacuationSites = await response.json();
+
+        evacuationSites.forEach(site => {
+            if (site.latitude && site.longitude) {
+                L.marker([site.latitude, site.longitude], { icon: customIcon })
+                    .addTo(map)
+                    .bindPopup(`
+                        <div class="text-center">
+                            <strong class="text-blue-700">${site.name}</strong><br>
+                            <span class="text-xs text-gray-600">${site.address}</span><br>
+                            <span class="text-xs font-semibold mt-1 block">Capacity: ${site.capacity}</span>
+                        </div>
+                    `);
+            }
+        });
+    } catch (error) {
+        console.error("Error loading map markers:", error);
+    }
 
     return map;
 }

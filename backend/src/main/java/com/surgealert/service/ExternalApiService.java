@@ -25,7 +25,7 @@ public class ExternalApiService {
 
     public WeatherResponse fetchWeatherForecast() {
         String url = String.format(
-            "https://api.open-meteo.com/v1/forecast?latitude=%s&longitude=%s&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=Asia/Singapore",
+            "https://api.open-meteo.com/v1/forecast?latitude=%s&longitude=%s&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=Asia/Manila",
             LAT, LON
         );
         try {
