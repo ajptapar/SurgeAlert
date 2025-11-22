@@ -16,13 +16,14 @@ import {
 // This function will be called by main.js after the page is loaded
 export function initializeAuth() {
     const firebaseConfig = {
-        apiKey: "AIzaSyBvryg0lG5ZRHeU4ucx32Go2dD4jxWrnr4",
-        authDomain: "surgealert-3be99.firebaseapp.com",
-        projectId: "surgealert-3be99",
-        storageBucket: "surgealert-3be99.firebasestorage.app",
-        messagingSenderId: "927215166423",
-        appId: "1:927215166423:web:075e1bd4950ae629b5e192",
-        measurementId: "G-K4MBQ91SB5"
+        apiKey: "AIzaSyAIoh6tolkRR3QRh2j1qmUK8znWMoUhkBQ",
+        authDomain: "surgealert-system.firebaseapp.com",
+        databaseURL: "https://surgealert-system-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "surgealert-system",
+        storageBucket: "surgealert-system.firebasestorage.app",
+        messagingSenderId: "135598658205",
+        appId: "1:135598658205:web:73839ede354c388a517a74",
+        measurementId: "G-KX9RXEEG5T"
     };
 
     const app = initializeApp(firebaseConfig);
