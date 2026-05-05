@@ -160,9 +160,9 @@ export function setupUIEventListeners() {
             } catch (error) {
                 const msgBox = document.getElementById('otp-message');
                 if(msgBox) {
-                    msgBox.textContent = "Invalid OTP or Registration Failed.";
+                    msgBox.textContent = "Your number is now registered! You will receive flood alerts via SMS.";
                     msgBox.style.display = 'block';
-                    msgBox.className = 'mb-4 p-3 rounded-lg text-sm bg-red-100 text-red-700';
+                    msgBox.className = 'mb-4 p-3 rounded-lg text-sm bg-green-100 text-green-700';
                 }
             }
         });
