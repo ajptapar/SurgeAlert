@@ -30,28 +30,27 @@
 
 ## 💻 My Contributions
 
-I designed, designed the UI, and wrote the code for the web application, backend API, Raspberry Pi runtime, and machine learning models:
+I designed the UI, and wrote the code for the web application, backend API, Raspberry Pi runtime, and machine learning models:
 
 ### 1. Web Application & UI Design (Designed & Developed)
-* **UI/UX Design:** Designed the layout, color-coded warning alert interfaces, and responsive navigation for both the public dashboard and admin consoles.
-* **Interactive Mapping & Charts:** Built the dynamic Leaflet map showing evacuation site locations and real-time Chart.js telemetry charts.
-* **Admin Functions:** Programmed portals to manage residents' directories, customize SMS warning templates, configure alert parameters, and audit system latency.
+* **UI/UX Design:** Designed responsive layouts, color-coded warning alert interfaces, and navigation for public and admin dashboards using Tailwind CSS v4.
+* **Interactive Mapping & Charts:** Developed dynamic Leaflet map integrations for sensor locations and real-time Chart.js telemetry visualizations.
+* **Admin Functions:** Programmed portals for managing residents' directories, customized SMS templates, configurations, and canary latency metrics.
 
 ### 2. Raspberry Pi Development (Created & Authored all `EdgeSystem` code)
-* **Core Runtime:** Authored the complete Python runtime script (`system_main.main_loop`) that manages sensor inputs and schedules data transmissions.
-* **Sensor Interfacing:** Wrote drivers to read distance measurements from ultrasonic sensors (via GPIO) and velocity from radar sensors (via serial/USB).
-* **Computer Vision:** Created and implemented the optical flow algorithm using **OpenCV** to estimate river surface velocity from camera feeds.
-* **Offline Resilience:** Programmed a local SQLite cache on the Pi to log data during internet outages and push them to the backend upon reconnection. Wrote the serial interface to send SMS alerts directly via a hardware GSM module when offline.
+* **Core Runtime:** Authored the Python runtime system (`system_main.main_loop`) to schedule sensor inputs and manage telemetry packets.
+* **Sensor & CV Integration:** Developed hardware drivers for ultrasonic/radar sensors and implemented an OpenCV optical flow algorithm for surface velocity estimation.
+* **Offline Resilience:** Built a local SQLite cache for offline logging and a hardware GSM serial interface to broadcast SMS alerts during network outages.
 
 ### 3. Machine Learning Engineering (Created & Trained)
-* **Model Pipeline:** Trained and designed the hybrid XGBoost classification/regression models to predict risk levels and water levels 1 hour in advance.
-* **Dataset Preprocessing:** Utilized SMOTE (Synthetic Minority Over-sampling Technique) and custom class weight multipliers to solve extreme class imbalance (rare flood events).
-* **Threshold Tuning:** Designed a validation grid search algorithm to tune custom decision boundaries, maximizing model recall and sensitivity.
+* **Predictive Pipeline:** Trained hybrid XGBoost classifier and regressor models to predict risk categories and water levels 1 hour in advance.
+* **Class Imbalance:** Applied SMOTE (Synthetic Minority Over-sampling Technique) and custom class-weight boosting to handle rare flood events.
+* **Threshold Tuning:** Designed a validation grid search algorithm to optimize multi-class probability decision boundaries for high-risk warning bands.
 
 ### 4. Backend & Sync API (Developed)
-* **Ingestion Client:** Configured the MQTT client to consume real-time sensor streams and sync them to the database.
-* **Multi-DB Adapter:** Built dynamic driver logic allowing the application to connect to PostgreSQL (production) and MySQL (local development) automatically.
-* **Sync Security:** Created authenticated API endpoints (`/api/edge/sync/*`) to securely distribute configurations, contact lists, and model binaries to the Pi.
+* **Telemetry Ingestion:** Configured MQTT clients to consume real-time edge telemetry and asynchronously ingest it into the database.
+* **Multi-DB Adaptation:** Coded dynamic database configuration drivers supporting automated fallback between PostgreSQL (production) and MySQL (local development).
+* **Edge Synchronization:** Built authenticated Spring Boot API endpoints (`/api/edge/sync/*`) to securely distribute configurations, contacts, and model binaries to the Pi.
 
 ---
 
